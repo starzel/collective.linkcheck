@@ -192,8 +192,9 @@ def run(app, args, rate=5):
                             r = session.get(url)
                         except requests.Timeout:
                             status_code = 504
+                            logger.debug('Timeout for %s' % url)
                         except requests.RequestException as exc:
-                            logger.warn(exc)
+                            logger.warn('Exception for %s: %s' % (url, exc))
                             status_code = 503
                         except UnicodeError as exc:
                             logger.warn("Unable to decode string: %r (%s)." % (
@@ -268,19 +269,19 @@ def run(app, args, rate=5):
                 for url in discard:
                     del tool.checked[url]
 
-            ##process crawling queue
-            ##disabled at the moment as there are problems with traversal
-            #catalog = getToolByName(tool, 'portal_catalog')
-            #crawl_uid = tool.crawl_dequeue()
-            #logger.info('Crawl iterator')
-            #while crawl_uid:
-            #    brains = catalog(UID=crawl_uid)
-            #    if brains:
-            #        obj = brains[0].getObject()
-            #        check_links_view = obj.restrictedTraverse('@@linkcheck')
-            #        check_links_view()
-            #        logger.info('Crawling: checked {0}'.format(obj.absolute_url()))
-            #    crawl_uid = tool.crawl_dequeue()
+            # process crawling queue
+            # disabled at the moment as there are problems with traversal
+            # catalog = getToolByName(tool, 'portal_catalog')
+            # crawl_uid = tool.crawl_dequeue()
+            # logger.info('Crawl iterator')
+            # while crawl_uid:
+            #     brains = catalog(UID=crawl_uid)
+            #     if brains:
+            #         obj = brains[0].getObject()
+            #         check_links_view = obj.restrictedTraverse('@@linkcheck')
+            #         check_links_view()
+            #         logger.info('Crawling: checked {0}'.format(obj.absolute_url()))
+            #     crawl_uid = tool.crawl_dequeue()
 
             # Fetch set of URLs to check (up to transaction size).
             queued = tool.queue[:settings.transaction_size]

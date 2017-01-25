@@ -82,9 +82,9 @@ class LinkCheckTool(SimpleItem):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(portal_type=portal_types)
         for brain in brains:
-            #asyncronous crawling not working yet
-            #self.crawl_enqueue(brain.UID)
-            
+            # asyncronous crawling not working yet
+            # self.crawl_enqueue(brain.UID)
+
             obj = brain.getObject()
             obj.restrictedTraverse('@@linkcheck')()
             logger.info('Crawling: checked {0}'.format(brain.getURL()))
