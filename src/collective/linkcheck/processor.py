@@ -151,7 +151,7 @@ def run(app, args, rate=5):
     logger.setLevel(level)
     logger.info("looking for sites...")
 
-    session = requests.Session(timeout=5)
+    session = requests.Session()
 
     counter = 0
     sites = {}
@@ -189,7 +189,8 @@ def run(app, args, rate=5):
                         r = None
 
                         try:
-                            r = session.get(url)
+                            logger.debug('Checking %s ...' % url)
+                            r = session.get(url, timeout=settings.timeout)
                         except requests.Timeout:
                             status_code = 504
                             logger.debug('Timeout for %s' % url)
